@@ -9,7 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -42,7 +46,6 @@ public class UserServiceImpl implements UserService {
 //            mav.addObject("email", user.getEmail());
             return new ModelAndView("admin_home");
         }
-
         Optional<AppUser> user = appUserRepository.findAppUserByEmailAndPassword(appUser.getEmail(), appUser.getPassword());
         if(user.isPresent()){
             httpSession.setAttribute("loggedInUser", user);
@@ -52,5 +55,13 @@ public class UserServiceImpl implements UserService {
         }else {
             return new ModelAndView("login");
         }
+
+
+
+
+
+
+
+
     }
 }
