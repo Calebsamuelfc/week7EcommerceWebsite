@@ -3,7 +3,7 @@ package com.kay.week7ecommerceproject.model;
 import lombok.*;
 
 import javax.persistence.*;
-//@Entity
+@Entity
 @Getter
 @Setter
 @ToString

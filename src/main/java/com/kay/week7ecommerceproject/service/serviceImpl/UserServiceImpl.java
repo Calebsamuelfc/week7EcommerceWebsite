@@ -2,8 +2,11 @@ package com.kay.week7ecommerceproject.service.serviceImpl;
 
 import com.kay.week7ecommerceproject.dto.AppUserDto;
 import com.kay.week7ecommerceproject.model.AppUser;
+import com.kay.week7ecommerceproject.model.Product;
 import com.kay.week7ecommerceproject.repository.AppUserRepository;
+import com.kay.week7ecommerceproject.service.ProductService;
 import com.kay.week7ecommerceproject.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,12 +19,12 @@ import java.util.Optional;
 import java.util.Scanner;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private AppUserRepository appUserRepository;
-    @Autowired
-    private HttpSession httpSession;
+    private final AppUserRepository appUserRepository;
+    private final HttpSession httpSession;
+    private final ProductService productService;
 
 
     @Override
@@ -42,9 +45,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ModelAndView login(AppUser appUser) {
         if (appUser.getEmail().equals("admin@gmail.com") && appUser.getPassword().equals("1234")){
-//                        mav.addObject("user", 'admin');
-//            mav.addObject("email", user.getEmail());
-            return new ModelAndView("admin_home");
+            ModelAndView mav = new ModelAndView("admin_home");
+            List<Product> productList = productService.displayAllProducts();
+            mav.addObject("productList",productList);
+            return mav;
         }
         Optional<AppUser> user = appUserRepository.findAppUserByEmailAndPassword(appUser.getEmail(), appUser.getPassword());
         if(user.isPresent()){

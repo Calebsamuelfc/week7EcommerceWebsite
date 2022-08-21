@@ -2,6 +2,8 @@ package com.kay.week7ecommerceproject.controller;
 
 import com.kay.week7ecommerceproject.dto.AppUserDto;
 import com.kay.week7ecommerceproject.model.AppUser;
+import com.kay.week7ecommerceproject.model.Product;
+import com.kay.week7ecommerceproject.service.ProductService;
 import com.kay.week7ecommerceproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,8 @@ public class AppUserController {
     private UserService userService;
     @Autowired
     private HttpSession httpSession;
+    @Autowired
+    ProductService productService;
 
     @GetMapping("/signup")
     public String  signup() {
@@ -52,6 +56,12 @@ public class AppUserController {
 //        model.addAttribute("listOfUsers", listOfUsers);
         System.out.println(model.getAttribute("user"));
         return "home";
+    }
+    @GetMapping("/admin_home")
+    public String adminHome(Model model) {
+        List<Product> productList = productService.displayAllProducts();
+        model.addAttribute("productList",productList);
+        return "admin_home";
     }
     @PostMapping({"/login", "/"})
     public ModelAndView userLogin (@ModelAttribute("user") AppUser appUser){
