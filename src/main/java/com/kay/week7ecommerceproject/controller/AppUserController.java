@@ -1,8 +1,11 @@
 package com.kay.week7ecommerceproject.controller;
 
 import com.kay.week7ecommerceproject.dto.AppUserDto;
+import com.kay.week7ecommerceproject.dto.LoginDto;
+import com.kay.week7ecommerceproject.exception.CustomAppException;
 import com.kay.week7ecommerceproject.model.AppUser;
 import com.kay.week7ecommerceproject.model.Product;
+import com.kay.week7ecommerceproject.service.CartService;
 import com.kay.week7ecommerceproject.service.ProductService;
 import com.kay.week7ecommerceproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,7 +26,7 @@ public class AppUserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private HttpSession httpSession;
+    private CartService cartService;
     @Autowired
     ProductService productService;
 
@@ -51,10 +55,8 @@ public class AppUserController {
     }
     @GetMapping("/home")
     public String  home(Model model) {
-//        List<User> listOfUsers = userService.getAllUsers();
-//        AppUser user =
-//        model.addAttribute("listOfUsers", listOfUsers);
-        System.out.println(model.getAttribute("user"));
+        List<Product> productList = productService.displayAllProducts();
+        model.addAttribute("productList",productList);
         return "home";
     }
     @GetMapping("/admin_home")
@@ -64,7 +66,20 @@ public class AppUserController {
         return "admin_home";
     }
     @PostMapping({"/login", "/"})
-    public ModelAndView userLogin (@ModelAttribute("user") AppUser appUser){
-        return userService.login(appUser);
+    public ModelAndView userLogin (@ModelAttribute("user") LoginDto loginDto){
+        return userService.login(loginDto);
     }
+
+    @GetMapping("/add_to_cart/{id}")
+    public String addProductToCart(@PathVariable String id) throws CustomAppException {
+        cartService.addToCart(Long.parseLong(id));
+        return "redirect:/home";
+    }
+    @GetMapping("/view_cart")
+    public String viewUserCart (Model model){
+        List<Product> productList = cartService.viewProductInCart();
+        model.addAttribute("productList",productList);
+        return "view_cart";
+    }
+
 }

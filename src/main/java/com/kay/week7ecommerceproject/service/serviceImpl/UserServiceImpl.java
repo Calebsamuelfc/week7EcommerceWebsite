@@ -1,6 +1,7 @@
 package com.kay.week7ecommerceproject.service.serviceImpl;
 
 import com.kay.week7ecommerceproject.dto.AppUserDto;
+import com.kay.week7ecommerceproject.dto.LoginDto;
 import com.kay.week7ecommerceproject.model.AppUser;
 import com.kay.week7ecommerceproject.model.Product;
 import com.kay.week7ecommerceproject.repository.AppUserRepository;
@@ -43,17 +44,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ModelAndView login(AppUser appUser) {
-        if (appUser.getEmail().equals("admin@gmail.com") && appUser.getPassword().equals("1234")){
+    public ModelAndView login(LoginDto loginDto) {
+        if (loginDto.getEmail().equals("admin@gmail.com") && loginDto.getPassword().equals("1234")){
             ModelAndView mav = new ModelAndView("admin_home");
             List<Product> productList = productService.displayAllProducts();
             mav.addObject("productList",productList);
             return mav;
         }
-        Optional<AppUser> user = appUserRepository.findAppUserByEmailAndPassword(appUser.getEmail(), appUser.getPassword());
+        Optional<AppUser> user = appUserRepository.findAppUserByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword());
         if(user.isPresent()){
-            httpSession.setAttribute("loggedInUser", user);
+            httpSession.setAttribute("loggedInUser", user.get());
+            List<Product> productList = productService.displayAllProducts();
             ModelAndView mav = new ModelAndView("home");
+            mav.addObject("productList",productList);
             mav.addObject("user", user);
             return mav;
         }else {

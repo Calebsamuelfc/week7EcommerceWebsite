@@ -46,7 +46,7 @@
 					Link
 				</a>
 				<ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-					<li><a class="dropdown-item" href="#">Action</a></li>
+					<li><a class="dropdown-item" href="#" th:href="@{'/view_cart/'}">Cart</a></li>
 					<li><a class="dropdown-item" href="#">Another action</a></li>
 					<li><hr class="dropdown-divider"></li>
 					<li><a class="dropdown-item" href="#">Something else here</a></li>
@@ -65,23 +65,21 @@
 		<table class="table table-hover table-danger table-striped mt-3 md-3">
 			<thead>
 			<tr>
-				<th scope="col">ID</th>
-				<th scope="col">FullName</th>
-				<th scope="col">Email</th>
+				<th scope="col">ProductName</th>
+				<th scope="col">Category</th>
+				<th scope="col">Price</th>
 				<th scope="col">Delete</th>
 				<th scope="col">Edit</th>
-				<th scope="col">view</th>
 			</tr>
 			</thead>
 			<tbody  class = "table-info">
-			<th:block th:each="user : ${listOfUsers}">
+			<th:block th:each=" product : ${productList}">
 				<tr>
-					<td>[[${user.id}]]</td>
-					<td>[[${user.fullName}]]</td>
-					<td>[[${user.email}]]</td>
-					<td><a th:href="@{'/delete/' + ${user.id}}" type="button" class="btn btn-danger btn-sm">DELETE</a></td>
-					<td><a th:href="@{'/edit/' + ${user.id}}" type="button" class="btn btn-info btn-sm">EDIT</a></td>
-					<td><a th:href="@{'/view/' + ${user.id}}" type="button" class="btn btn-success btn-sm">VIEW</a></td>
+					<td>[[${product.productName}]]</td>
+					<td>[[${product.category}]]</td>
+					<td>[[${product.price}]]</td>
+					<td><a th:href="@{'/add_to_cart/' + ${product.id}}" type="button" class="btn btn-danger btn-sm">Add To Cart</a></td>
+					<td><a th:href="@{'/edit_product/' + ${product.id}}" type="button" class="btn btn-info btn-sm">Add To Wishlist</a></td>
 				</tr>
 			</th:block>
 			</tbody>
