@@ -19,6 +19,6 @@ public class Cart {
     @OneToOne
 //    @JoinColumn(name = "user_id")
     private AppUser user;
-    @OneToMany
+    @ManyToMany
     private List<Product> product;
 }

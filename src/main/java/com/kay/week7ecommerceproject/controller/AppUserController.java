@@ -69,10 +69,18 @@ public class AppUserController {
     public ModelAndView userLogin (@ModelAttribute("user") LoginDto loginDto){
         return userService.login(loginDto);
     }
-
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/login";
+    }
     @GetMapping("/add_to_cart/{id}")
     public String addProductToCart(@PathVariable String id) throws CustomAppException {
         cartService.addToCart(Long.parseLong(id));
+        return "redirect:/home";
+    }
+    @GetMapping("/remove_from_cart/{id}")
+    public String removeFromCart(@PathVariable String id) throws CustomAppException {
+        cartService.removeFromCart(Long.parseLong(id));
         return "redirect:/home";
     }
     @GetMapping("/view_cart")

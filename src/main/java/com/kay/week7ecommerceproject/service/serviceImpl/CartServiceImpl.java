@@ -56,6 +56,18 @@ public class CartServiceImpl implements CartService {
         }else{
             return createCart(appUser).getProduct();
         }
+    }
 
+    @Override
+    public  void removeFromCart(Long id) throws CustomAppException {
+        AppUser appUser = (AppUser) httpSession.getAttribute("loggedInUser");
+        Product product = productRepository.findById(id).orElseThrow(()-> new CustomAppException("Product doesn't exit."));
+        Optional<Cart> cart = cartRepository.findByUserId(appUser.getId());
+        if(cart.isPresent()){
+            List<Product> productList = cart.get().getProduct();
+            productList.remove(product);
+            cart.get().setProduct(productList);
+            cartRepository.save(cart.get());
+        }
     }
 }

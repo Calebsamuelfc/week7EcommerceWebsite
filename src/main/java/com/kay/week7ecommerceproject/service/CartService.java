@@ -13,4 +13,6 @@ public interface CartService {
     void addToCart(Long id) throws CustomAppException;
 
     List<Product> viewProductInCart();
+
+    void removeFromCart(Long id) throws CustomAppException;
 }
